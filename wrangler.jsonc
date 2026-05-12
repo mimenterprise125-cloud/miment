@@ -1,7 +1,38 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "tanstack-start-app",
+  "name": "mim-crm",
+  "main": "dist/server/index.js",
   "compatibility_date": "2025-09-24",
-  "compatibility_flags": ["nodejs_compat"],
-  "main": "@tanstack/react-start/server-entry",
+  "compatibility_flags": [
+    "nodejs_compat",
+    "nodejs_compat_v2"
+  ],
+  "build": {
+    "command": "npm run build",
+    "cwd": "."
+  },
+  "env": {
+    "production": {
+      "name": "mim-crm-prod",
+      "routes": [
+        {
+          "pattern": "mim.example.com/*",
+          "zone_name": "example.com"
+        }
+      ]
+    },
+    "staging": {
+      "name": "mim-crm-staging",
+      "routes": [
+        {
+          "pattern": "staging-mim.example.com/*",
+          "zone_name": "example.com"
+        }
+      ]
+    }
+  },
+  "vars": {
+    "ENVIRONMENT": "production"
+  }
 }
+
