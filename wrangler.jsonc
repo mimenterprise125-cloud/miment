@@ -3,7 +3,6 @@
   "name": "miment",
   "compatibility_date": "2025-09-24",
   "compatibility_flags": [
-    "nodejs_compat",
     "nodejs_compat_v2"
   ],
   "env": {
