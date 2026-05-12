@@ -1,16 +1,11 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "miment",
-  "main": "dist/server/index.js",
   "compatibility_date": "2025-09-24",
   "compatibility_flags": [
     "nodejs_compat",
     "nodejs_compat_v2"
   ],
-  "build": {
-    "command": "npm run build",
-    "cwd": "."
-  },
   "env": {
     "production": {
       "name": "mim-crm-prod",
