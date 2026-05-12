@@ -2,51 +2,66 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
 export function LoadingScreen() {
-  const [isLoading, setIsLoading] = useState(() => {
-    // Only show loading screen on initial page load
-    return typeof window !== "undefined" && !sessionStorage.getItem("_mim_app_loaded");
-  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasInitialized, setHasInitialized] = useState(false);
 
   useEffect(() => {
-    if (!isLoading) return;
-    
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-      // Mark that app has been loaded in this session
-      if (typeof window !== "undefined") {
-        sessionStorage.setItem("_mim_app_loaded", "true");
-      }
-    }, 2500); // Show for 2.5 seconds on initial load only
+    // Only run on client side
+    if (typeof window === "undefined") return;
 
-    return () => clearTimeout(timer);
-  }, [isLoading]);
+    // Initialize loading state only once
+    if (!hasInitialized) {
+      // Check if we've already shown loading screen in this session
+      const alreadyLoaded = sessionStorage.getItem("_mim_app_loaded");
+      
+      if (!alreadyLoaded) {
+        setIsLoading(true);
+        // Show loading screen for 2 seconds on first load
+        const timer = setTimeout(() => {
+          setIsLoading(false);
+          sessionStorage.setItem("_mim_app_loaded", "true");
+        }, 2000);
+
+        return () => clearTimeout(timer);
+      } else {
+        // Already loaded in this session, skip loading screen
+        setIsLoading(false);
+      }
+
+      setHasInitialized(true);
+    }
+  }, [hasInitialized]);
+
+  // Don't render if not loading
+  if (!isLoading) return null;
 
   return (
     <motion.div
       className="fixed inset-0 z-[9999] overflow-hidden"
       initial={{ opacity: 0 }}
-      animate={{ opacity: isLoading ? 1 : 0 }}
-      transition={{ duration: 0.5 }}
-      style={{ pointerEvents: isLoading ? "auto" : "none" }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3 }}
     >
       {/* Background fade in */}
       <motion.div
         className="absolute inset-0 bg-ink"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.6 }}
+        transition={{ duration: 0.4 }}
       />
+      
       {/* Left sliding panel */}
       <motion.div
-        className="absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r from-ink via-ink to-ink/80"
+        className="absolute inset-y-0 left-0 w-1/2"
         initial={{ x: 0, scaleY: 0 }}
         animate={{ 
-          x: isLoading ? [0, 0, "-100%"] : 0,
-          scaleY: isLoading ? [0, 1, 1] : 1
+          x: [0, 0, "-100%"],
+          scaleY: [0, 1, 1]
         }}
         transition={{ 
-          x: { duration: 1.2, delay: isLoading ? 1 : 0.5, ease: [0.65, 0, 0.35, 1] },
-          scaleY: { duration: 0.5, ease: "easeOut" },
+          x: { duration: 1, delay: 0.3, ease: [0.65, 0, 0.35, 1] },
+          scaleY: { duration: 0.4, ease: "easeOut" },
         }}
         style={{
           background: "linear-gradient(90deg, oklch(0.13 0 0 / 1) 0%, oklch(0.13 0 0 / 0.95) 100%)",
@@ -59,12 +74,12 @@ export function LoadingScreen() {
         className="absolute inset-y-0 right-0 w-1/2"
         initial={{ x: 0, scaleY: 0 }}
         animate={{ 
-          x: isLoading ? [0, 0, "100%"] : 0,
-          scaleY: isLoading ? [0, 1, 1] : 1
+          x: [0, 0, "100%"],
+          scaleY: [0, 1, 1]
         }}
         transition={{ 
-          x: { duration: 1.2, delay: isLoading ? 1 : 0.5, ease: [0.65, 0, 0.35, 1] },
-          scaleY: { duration: 0.5, ease: "easeOut" },
+          x: { duration: 1, delay: 0.3, ease: [0.65, 0, 0.35, 1] },
+          scaleY: { duration: 0.4, ease: "easeOut" },
         }}
         style={{
           background: "linear-gradient(90deg, oklch(0.13 0 0 / 0.95) 0%, oklch(0.13 0 0 / 1) 100%)",
@@ -77,24 +92,15 @@ export function LoadingScreen() {
         <motion.div
           className="text-center"
           initial={{ opacity: 1 }}
-          animate={{ opacity: isLoading ? 0 : 0 }}
-          transition={{ duration: 0.3, delay: isLoading ? 0.9 : 0 }}
+          animate={{ opacity: 0 }}
+          transition={{ delay: 1.5, duration: 0.5 }}
         >
           <motion.div
-            className="text-center"
-            animate={{ y: [-10, 10, -10] }}
-            transition={{ duration: 2, repeat: Infinity }}
+            className="inline-block"
+            animate={{ rotate: 360 }}
+            transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
           >
-            <div className="font-display text-4xl tracking-[0.2em] uppercase">MIM</div>
-            <div className="text-xs tracking-[0.3em] uppercase text-gold mt-2">Enterprises</div>
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-              className="mt-6 inline-block"
-            >
-              <div className="text-2xl text-gold">◆</div>
-            </motion.div>
-            <div className="mt-3 text-xs tracking-[0.2em] uppercase text-gold">Loading</div>
+            <div className="h-12 w-12 rounded-full border-4 border-gold/30 border-t-gold"></div>
           </motion.div>
         </motion.div>
       </div>
