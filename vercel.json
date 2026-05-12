@@ -2,11 +2,6 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist/client",
   "framework": "vite",
-  "env": {
-    "VITE_SUPABASE_URL": "@VITE_SUPABASE_URL",
-    "VITE_SUPABASE_ANON_KEY": "@VITE_SUPABASE_ANON_KEY",
-    "VITE_SUPABASE_SERVICE_ROLE_KEY": "@VITE_SUPABASE_SERVICE_ROLE_KEY"
-  },
   "rewrites": [
     {
       "source": "/(.*)",
