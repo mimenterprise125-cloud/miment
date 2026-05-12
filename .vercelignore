@@ -27,7 +27,6 @@ out
 pnpm-lock.yaml
 yarn.lock
 package-lock.json
-bun.lockb
 
 # Development files
 *.spec.ts
