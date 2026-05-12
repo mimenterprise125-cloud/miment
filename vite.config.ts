@@ -7,6 +7,9 @@
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 export default defineConfig({
+  cloudflare: {
+    isWorker: true
+  },
   vite: {
     ssr: {
       external: ["workerd"]
