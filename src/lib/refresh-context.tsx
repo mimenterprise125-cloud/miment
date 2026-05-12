@@ -32,7 +32,13 @@ export function RefreshProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   // Listen for tab visibility changes with debounce
+  // DISABLED on production to avoid 404 errors on Vercel
   useEffect(() => {
+    // Skip auto-refresh in production to avoid routing issues
+    if (import.meta.env.PROD) {
+      return;
+    }
+
     let debounceTimer: NodeJS.Timeout;
 
     const handleVisibilityChange = () => {
