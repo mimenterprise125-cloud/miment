@@ -1,0 +1,190 @@
+# 🚀 DEPLOYMENT INSTRUCTIONS - READ CAREFULLY
+
+## Current Status
+✅ Build configured correctly  
+✅ wrangler.jsonc simplified  
+✅ Local build works  
+❌ Website still shows 404 on Cloudflare
+
+## The Problem
+Cloudflare Pages auto-build conflicts with TanStack Start SSR generation.
+
+## The Solution
+**Stop using Cloudflare Pages auto-build.**  
+**Deploy manually using `wrangler deploy`.**
+
+---
+
+## 📋 EXACT DEPLOYMENT STEPS
+
+### Step 1: Build Locally
+Open terminal in project root and run:
+```bash
+npm run build
+```
+
+**Expected output:**
+```
+✓ built in X.XXs
+✓ XXX modules transformed
+dist/server/server.js ...
+dist/client/assets/...
+```
+
+Build should complete WITHOUT errors.
+
+### Step 2: Deploy with Wrangler
+After build finishes, run:
+```bash
+npx wrangler deploy
+```
+
+**Expected output:**
+```
+⛅️ wrangler X.X.X
+Uploading Workers...
+✨ Success! Uploaded miment (X.XXs)
+```
+
+### Step 3: Test
+Open in browser:
+```
+https://miment.mimenterprise125.workers.dev
+```
+
+**Expected result:**  
+✅ Website loads (not 404)
+
+---
+
+## ⚠️ IMPORTANT
+
+### What Changed in This Project
+- ✅ `wrangler.jsonc` - Minimal config only
+- ✅ Build script - Simple `npm run build`
+- ✅ No post-build hooks
+- ✅ No custom Worker generation
+- ✅ Let TanStack Start handle everything
+
+### Current Config
+**wrangler.jsonc:**
+```jsonc
+{
+  "name": "miment",
+  "compatibility_date": "2026-05-13"
+}
+```
+
+That's it. The Cloudflare Vite plugin auto-generates the Worker.
+
+---
+
+## 🔍 If 404 Still Appears
+
+1. **Did you run `npm run build` first?**
+   - Yes → Go to step 2
+   - No → Run it now
+
+2. **Did you run `npx wrangler deploy` after build?**
+   - Yes → Check Cloudflare Workers dashboard
+   - No → Run it now
+
+3. **Check deployment in Cloudflare:**
+   - Go to https://dash.cloudflare.com
+   - Click "Workers & Pages"
+   - Click "miment"
+   - Check if "Success" is showing
+
+4. **Check generated files:**
+   ```bash
+   # After build, verify these exist:
+   ls dist/server/server.js        # ✅ Should exist
+   ls dist/client/wrangler.json    # ✅ Should exist
+   ```
+
+5. **View Worker logs:**
+   ```bash
+   npx wrangler tail
+   ```
+   - This shows what the Worker is doing
+   - If you see errors, they'll appear here
+
+---
+
+## 🚫 Don't Do This
+
+❌ Don't use Cloudflare Pages "Connect a Git Repository"  
+❌ Don't expect Pages auto-build to work  
+❌ Don't modify wrangler.jsonc with custom config  
+❌ Don't add a `main` field to wrangler.jsonc  
+❌ Don't expect Pages build logs to work  
+
+---
+
+## ✅ Do This
+
+✅ Build locally: `npm run build`  
+✅ Deploy locally: `npx wrangler deploy`  
+✅ Test at: `https://miment.mimenterprise125.workers.dev`  
+✅ Check logs: `npx wrangler tail`  
+✅ Keep wrangler.jsonc minimal  
+
+---
+
+## 📚 Build Output Structure
+
+After `npm run build`, you have:
+
+```
+dist/
+├── server/
+│   ├── server.js           ← Worker entry point (auto-generated)
+│   └── assets/             ← Route/component bundles
+└── client/
+    ├── assets/             ← Static assets (JS, CSS, images)
+    ├── wrangler.json       ← Auto-generated (Vite plugin)
+    └── .assetsignore       ← Asset config
+```
+
+---
+
+## 🎯 Complete Workflow
+
+```bash
+# Make changes to your code
+# ...
+
+# 1. Build locally
+npm run build
+
+# 2. Deploy to Cloudflare
+npx wrangler deploy
+
+# 3. Visit your site
+# https://miment.mimenterprise125.workers.dev
+
+# 4. (Optional) View real-time logs
+npx wrangler tail
+```
+
+---
+
+## 💡 Why This Works
+
+1. **Local build** - You control the build process
+2. **Wrangler deploy** - Direct deployment to Workers
+3. **No Pages validation** - Avoids pre-build conflicts
+4. **Full SSR support** - TanStack Start generates complete Worker
+5. **Consistent** - Same build locally and in production
+
+---
+
+## 📞 Summary
+
+Your app is ready. Now you just need to:
+
+1. `npm run build`
+2. `npx wrangler deploy`
+3. Visit `https://miment.mimenterprise125.workers.dev`
+
+That's it! 🎉
