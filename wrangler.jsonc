@@ -1,35 +1,5 @@
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
   "name": "miment",
-  "compatibility_date": "2025-09-24",
-  "compatibility_flags": [
-    "nodejs_compat_v2"
-  ],
-  "assets": {
-    "directory": "./dist/client"
-  },
-  "env": {
-    "production": {
-      "name": "mim-crm-prod",
-      "routes": [
-        {
-          "pattern": "mim.example.com/*",
-          "zone_name": "example.com"
-        }
-      ]
-    },
-    "staging": {
-      "name": "mim-crm-staging",
-      "routes": [
-        {
-          "pattern": "staging-mim.example.com/*",
-          "zone_name": "example.com"
-        }
-      ]
-    }
-  },
-  "vars": {
-    "ENVIRONMENT": "production"
-  }
+  "compatibility_date": "2026-05-13"
 }
 
