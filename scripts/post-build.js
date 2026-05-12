@@ -7,10 +7,12 @@
  * has the correct configuration pointing to dist/server/server.js
  */
 
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-const distServerPath = path.join(__dirname, 'dist', 'server');
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const distServerPath = path.join(__dirname, '..', 'dist', 'server');
 const wranglerJsonPath = path.join(distServerPath, 'wrangler.json');
 
 // Configuration for Cloudflare Workers
